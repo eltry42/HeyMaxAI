@@ -1,12 +1,15 @@
 from dotenv import load_dotenv
-# from db import setup_db
-from controller import run_bot_polling 
-
 load_dotenv(override=True)
 
+from controller import run_bot_polling
+from db import setup_db, shutdown_db
+
 def main():
-    # setup_db()
+    print("Starting Process...")
+    setup_db()
     run_bot_polling()
+    shutdown_db()
+    print("Process Terminated")
 
 if __name__ == '__main__':
     main()
