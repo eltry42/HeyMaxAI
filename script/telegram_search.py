@@ -12,17 +12,13 @@ load_dotenv()
 # Use your own api_id and api_hash -> GET FROM https://my.telegram.org/auth
 api_id = os.getenv("TELEGRAM_API_ID")
 api_hash = os.getenv("TELEGRAM_API_HASH")
-chat_usernames_to_check = ["heymax.ai community", "heymaxai", "https://t.me/milelion"]
-clear_data = True
-message_amount = 5000
+chat_usernames_to_check = ["milelion", "heymaxai", "heymax.ai community"]
+# clear_data = True
+message_amount = 10000
 
 async def run():
     async with TelegramClient("session_name", api_id, api_hash) as client:
         await client.start()
-
-        if clear_data:
-            with open("search_results.csv", "w") as file:
-                pass
 
         with open("keywords.txt", "r") as f:
             keywords = [k.strip() for k in f.readlines()]
@@ -61,8 +57,11 @@ async def run():
                         # Check if the message contains any of the keywords
                         if not any(keyword in message.message.lower() for keyword in keywords):
                             continue
-
-                        message_link = f"https://t.me/{username}/{message.id}"
+                        
+                        if username == "heymax.ai community" :
+                            message_link = f"https://t.me/+gNZRwXXy9Gc1MzJl/{message.id}"
+                        else:
+                            message_link = f"https://t.me/{username}/{message.id}"
 
                         # Skip already processed messages
                         if message_link in existing_messages:
@@ -73,12 +72,15 @@ async def run():
                         if message.media and isinstance(message.media, MessageMediaPhoto):
                             image_path = await client.download_media(message.media, file=f"images/{message.id}.jpg")
 
+
+                        keywordFound = next((keyword for keyword in keywords if keyword in message.message.lower()), None)
+
                         writer.writerow([
                             username,
                             message.message,
                             message.date.strftime("%Y-%m-%d %H:%M:%S"),
                             message_link,
-                            next((keyword for keyword in keywords if keyword in message.message.lower()), None),
+                            keywordFound,
                             image_path  # Store the image path or URL
                         ])
 
@@ -87,6 +89,7 @@ async def run():
                             channel_id,
                             message.message,
                             message.date,
+                            keywordFound,
                             media_url=image_path
                         )
 

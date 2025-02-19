@@ -50,17 +50,17 @@ def insert_channel(name, scrape_status=False):
     cursor.close()
     conn.close()
 
-def insert_scraped_message(channel_id, content, posted_at, media_url=None):
+def insert_scraped_message(channel_id, content, posted_at, keyword, media_url=None):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     query = sql.SQL("""
-        INSERT INTO ScrapedMessages (channel_id, content, media_url, posted_at)
-        VALUES (%s, %s, %s, %s)
+        INSERT INTO ScrapedMessages (channel_id, content, media_url, posted_at, keyword)
+        VALUES (%s, %s, %s, %s, %s)
     """)
 
     try:
-        cursor.execute(query, (channel_id, content, media_url, posted_at))
+        cursor.execute(query, (channel_id, content, media_url, posted_at, keyword))
         conn.commit()
         print(f"Inserted message into DB: {content[:50]}...")  # Print first 50 chars
     except Exception as e:

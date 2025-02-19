@@ -2,7 +2,6 @@ hsbc revo
 #dp 
 allows contactless
 dbs wwmc
-fail mcc
 mpd good
 fave payment
 saved visa
