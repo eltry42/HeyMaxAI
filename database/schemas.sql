@@ -18,7 +18,8 @@ CREATE TABLE ScrapedMessages (
     channel_id INT REFERENCES Channels(channel_id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     media_url TEXT,
-    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    keyword TEXT NOT NULL
 );
 
 CREATE TABLE BotInteractions (
