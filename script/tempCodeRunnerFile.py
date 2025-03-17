@@ -1,1 +1,1 @@
-clear_data = True
+GEMINI_API_KEY
